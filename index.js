@@ -41,7 +41,13 @@ app.use('/api/grievances', grievanceRoutes)
 app.use('/api/auth', authRoutes)
 
 const PORT = process.env.PORT || 5000
-const MONGODB_URI = process.env.MONGO_URI
+const MONGODB_URI = process.env.MONGODB_URI
+
+if (!MONGODB_URI) {
+  console.error("❌ MONGODB_URI is missing")
+  process.exit(1)
+}
+
 
 ;(async function start(){
   try{
