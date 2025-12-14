@@ -204,30 +204,16 @@ router.patch('/:id/status', authenticate, authorize('admin'), async (req,res)=> 
 
 // GET file - serve uploaded files
 // GET file - serve uploaded files
-router.get('/files/:filename', authenticate, async (req, res) => {
+// GET file - PUBLIC access (NO AUTH)
+router.get('/files/:filename', (req, res) => {
   try {
     const { filename } = req.params
     const filePath = path.join(__dirname, '../uploads', filename)
-    const fs = await import('fs')
-    
+
     if (!fs.existsSync(filePath)) {
       return res.status(404).json({ error: 'File not found' })
     }
-    
-    // Check if user has access to this file (file belongs to their grievance)
-    const grievance = await Grievance.findOne({ 
-      'files.filename': filename 
-    }).populate('createdBy', 'name email')
-    
-    if (!grievance) {
-      return res.status(404).json({ error: 'File not found' })
-    }
-    
-    // Users can only access files from their own grievances, admins can access all
-    if (req.user.role !== 'admin' && grievance.createdBy._id.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ error: 'Access denied' })
-    }
-    
+
     res.sendFile(filePath)
   } catch (e) {
     res.status(500).json({ error: e.message })
