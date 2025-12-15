@@ -71,48 +71,50 @@ if (!MONGODB_URI) {
     await mongoose.connect(MONGODB_URI)
     try{ process.stdout.write('Connected to MongoDB\n') }catch(e){}
 
-    // seed default users - ensure they exist
-    try{
-      const passwordHash = await bcrypt.hash('password', 10)
-      
-      // Check and create admin user
-      let admin = await User.findOne({ email: 'admin@example.com' })
-      if (!admin) {
-        admin = new User({ 
-          email: 'admin@example.com', 
-          passwordHash, 
-          name: 'Admin User',
-          role: 'admin'
-        })
-        await admin.save()
-        try{ process.stdout.write('Created admin user: admin@example.com / password\n') }catch(e){}
-      } else if (admin.role !== 'admin') {
-        // Update existing user to admin if they're not already
-        admin.role = 'admin'
-        admin.passwordHash = passwordHash
-        await admin.save()
-        try{ process.stdout.write('Updated user to admin: admin@example.com / password\n') }catch(e){}
-      }
-      
-      // Check and create regular user
-      let user = await User.findOne({ email: 'user@example.com' })
-      if (!user) {
-        user = new User({ 
-          email: 'user@example.com', 
-          passwordHash, 
-          name: 'Demo User',
-          role: 'user'
-        })
-        await user.save()
-        try{ process.stdout.write('Created user: user@example.com / password\n') }catch(e){}
-      }
-      
-      try{ 
-        process.stdout.write('\nDefault login credentials:\n')
-        process.stdout.write('  Admin: admin@example.com / password\n')
-        process.stdout.write('  User: user@example.com / password\n\n')
-      }catch(e){}
-    }catch(e){ try{ process.stderr.write('User seed error ' + (e && e.stack ? e.stack : String(e)) + '\n') }catch(_){} }
+    // seed default users - only in development
+    if (process.env.NODE_ENV !== 'production') {
+      try{
+        const passwordHash = await bcrypt.hash('password', 10)
+        
+        // Check and create admin user
+        let admin = await User.findOne({ email: 'admin@example.com' })
+        if (!admin) {
+          admin = new User({ 
+            email: 'admin@example.com', 
+            passwordHash, 
+            name: 'Admin User',
+            role: 'admin'
+          })
+          await admin.save()
+          try{ process.stdout.write('Created admin user: admin@example.com / password\n') }catch(e){}
+        } else if (admin.role !== 'admin') {
+          // Update existing user to admin if they're not already
+          admin.role = 'admin'
+          admin.passwordHash = passwordHash
+          await admin.save()
+          try{ process.stdout.write('Updated user to admin: admin@example.com / password\n') }catch(e){}
+        }
+        
+        // Check and create regular user
+        let user = await User.findOne({ email: 'user@example.com' })
+        if (!user) {
+          user = new User({ 
+            email: 'user@example.com', 
+            passwordHash, 
+            name: 'Demo User',
+            role: 'user'
+          })
+          await user.save()
+          try{ process.stdout.write('Created user: user@example.com / password\n') }catch(e){}
+        }
+        
+        try{ 
+          process.stdout.write('\nDefault login credentials:\n')
+          process.stdout.write('  Admin: admin@example.com / password\n')
+          process.stdout.write('  User: user@example.com / password\n\n')
+        }catch(e){}
+      }catch(e){ try{ process.stderr.write('User seed error ' + (e && e.stack ? e.stack : String(e)) + '\n') }catch(_){} }
+    }
 
     app.listen(PORT, ()=> { try{ process.stdout.write('Server listening on ' + PORT + '\n') }catch(e){} })
   }catch(err){
