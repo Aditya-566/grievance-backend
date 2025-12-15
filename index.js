@@ -4,7 +4,7 @@ dotenv.config()
 import mongoose from 'mongoose'
 import cors from 'cors'
 import passport from 'passport'
-import session from 'express-session'
+
 
 import grievanceRoutes from './routes/grievanceRoutes.js'
 import authRoutes from './routes/authRoutes.js'
@@ -22,14 +22,13 @@ app.use(
   })
 )
 
+
+
 app.use(express.json())
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'your-session-secret',
-  resave: false,
-  saveUninitialized: false
-}))
 app.use(passport.initialize())
-app.use(passport.session())
+
+
+
 
 // local logging helpers (avoid global name collisions)
 function _safeLog(...args){
