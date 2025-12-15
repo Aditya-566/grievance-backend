@@ -5,7 +5,6 @@ import upload from '../middleware/upload.js'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import fs from 'fs'
-import path from 'path'
 
 const router = express.Router()
 
