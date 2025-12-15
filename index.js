@@ -14,7 +14,7 @@ import bcrypt from 'bcrypt'
 
 
 const app = express()
-const FRONTEND_URL = process.env.FRONTEND_URL || 'https://grievance-platform.vercel.app'
+const FRONTEND_URL = (process.env.FRONTEND_URL || 'https://grievance-platform.vercel.app').replace(/"/g, '').trim()
 
 app.use(
   cors({
