@@ -13,10 +13,15 @@ import bcrypt from 'bcrypt'
 
 
 const app = express()
-app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
-  credentials: true
-}))
+const FRONTEND_URL = 'https://grievance-platform.vercel.app'
+
+app.use(
+  cors({
+    origin: FRONTEND_URL,
+    credentials: true,
+  })
+)
+
 app.use(express.json())
 app.use(session({
   secret: process.env.SESSION_SECRET || 'your-session-secret',
