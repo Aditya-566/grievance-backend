@@ -24,7 +24,7 @@ router.post('/register', async (req,res) => {
     }
     const passwordHash = await bcrypt.hash(password, 10)
     const u = new User({ email, passwordHash, name, role: 'user' })
-    await u.save()
+    await u.save();
     res.status(201).json({ id: u._id, email: u.email, name: u.name, role: u.role })
   }catch(e){
     console.error('Registration error:', e)
