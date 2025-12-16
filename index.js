@@ -9,7 +9,6 @@ import authRoutes from './routes/authRoutes.js'
 import User from './models/User.js'
 import bcrypt from 'bcrypt'
 
-0
 const app = express()
 const FRONTEND_URL = (process.env.FRONTEND_URL || 'https://grievance-platform.vercel.app').replace(/"/g, '').trim()
 const NODE_ENV = process.env.NODE_ENV || 'development'
