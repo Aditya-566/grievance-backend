@@ -44,7 +44,7 @@ app.use(
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With']
   })
 
-
+);
 
 app.use(express.json())
 
